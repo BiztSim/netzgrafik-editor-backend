@@ -3,7 +3,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/netzgrafikeditor
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8081/realms/netzgrafikeditor}
+          jwk-set-uri: ${OIDC_JWK_SET_URI:}
   jooq:
     sql-dialect: Postgres
   flyway:
@@ -12,15 +13,15 @@ spring:
     locations: classpath:db/migration
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    url: ${DB_URL}
+    username: ${DB_USER:netzgrafikeditor}
+    password: ${DB_PASSWORD:netzgrafikeditor}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/netzgrafikeditor}
 
 endpoints:
   web:
     cors:
       path-mappings: /**
-      allowed-origins: ${CORS_ALLOWED_ORIGINS}
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
       allowed-methods: GET, POST, PUT, DELETE
       allowed-headers: "*"
 
@@ -29,8 +30,9 @@ logging:
     org.springframework: INFO
 
 auth:
+  roles-claim-name: ${AUTH_ROLES_CLAIM_NAME:roles}
   audience:
-    service-name: ${AUTH_SERVICE_NAME}
+    service-name: ${AUTH_SERVICE_NAME:fc44839c-e95f-4854-a52d-449867a9aa62}
 
 # only active in 'local' profile
 springdoc:

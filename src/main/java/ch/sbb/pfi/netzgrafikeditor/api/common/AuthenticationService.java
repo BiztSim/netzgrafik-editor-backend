@@ -97,7 +97,7 @@ public class AuthenticationService {
     public boolean isAdmin() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .anyMatch(SecurityConfig.ADMIN_ROLE::equals);
+                .anyMatch(auth -> SecurityConfig.ADMIN_ROLE.equals(auth) || SecurityConfig.NGE_ADMIN_ROLE.equals(auth));
     }
 
     private Optional<String> tryGetClaim(String claim) {
